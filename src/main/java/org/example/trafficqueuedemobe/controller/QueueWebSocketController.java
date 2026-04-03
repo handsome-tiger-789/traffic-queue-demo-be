@@ -2,7 +2,6 @@ package org.example.trafficqueuedemobe.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.trafficqueuedemobe.dto.QueueJoinRequest;
 import org.example.trafficqueuedemobe.dto.QueueJoinResponse;
 import org.example.trafficqueuedemobe.dto.QueueStatusResponse;
 import org.example.trafficqueuedemobe.service.QueueService;
@@ -23,23 +22,19 @@ public class QueueWebSocketController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/queue/join")
-    public void joinQueue(@Payload QueueJoinRequest request, SimpMessageHeaderAccessor headerAccessor) {
-        String userId = request.getUserId();
-        if (userId == null || userId.isBlank()) {
-            userId = headerAccessor.getSessionId();
-        }
+    public void joinQueue(SimpMessageHeaderAccessor headerAccessor) {
+        String sessionId = headerAccessor.getSessionId();
 
-        QueueJoinResponse response = queueService.joinQueue(userId, request.getPriority());
+        QueueJoinResponse response = queueService.joinQueue(sessionId);
 
         // Store token in WebSocket session for disconnect cleanup
         headerAccessor.getSessionAttributes().put("token", response.getToken());
 
         // Send position to the specific user
-        String sessionId = headerAccessor.getSessionId();
         messagingTemplate.convertAndSendToUser(sessionId, "/queue/position", response,
                 createHeaders(sessionId));
 
-        log.info("User {} joined queue via WebSocket, token: {}", userId, response.getToken());
+        log.info("User {} joined queue via WebSocket, token: {}", sessionId, response.getToken());
     }
 
     @MessageMapping("/queue/cancel")
