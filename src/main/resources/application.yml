@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: traffic-queue-demo-be
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:queue_redis_pass!}
+      timeout: 5000
+      connect-timeout: 3000
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:queue_admin}
+    password: ${RABBITMQ_PASS:queue_rabbit_pass!}
+    virtual-host: ${RABBITMQ_VHOST:queue_vhost}
+    connection-timeout: 5000
+
+servers:
+  fe-url: ${FE_URL:http://localhost:3000}
+
+queue:
+  process:
+    batch-size: 1 # N명씩 처리
+  active:
+    ttl-seconds: 300
+  message:
+    ttl-ms: 600000
