@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig {
 
-    @Value("${servers.fe-url:http://localhost:3000}")
+    @Value("${servers.fe-url}")
     private String feUrl;
 
     @Bean

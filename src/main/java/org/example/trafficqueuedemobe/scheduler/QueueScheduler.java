@@ -20,7 +20,7 @@ public class QueueScheduler {
     private final QueueService queueService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    @Value("${queue.process.batch-size:5}")
+    @Value("${queue.process.batch-size}")
     private int batchSize;
 
     @Scheduled(fixedRate = 5000)
