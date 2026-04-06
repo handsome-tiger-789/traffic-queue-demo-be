@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${queue.message.ttl-ms}")
+    @Value("${queue.message.ttl-ms:600000}")
     private int messageTtlMs;
 
     public static final String EXCHANGE = "queue.exchange";

@@ -31,10 +31,10 @@ public class QueueService {
     private final StringRedisTemplate redisTemplate;
     private final QueuePublisher queuePublisher;
 
-    @Value("${queue.process.batch-size}")
+    @Value("${queue.process.batch-size:5}")
     private int batchSize;
 
-    @Value("${queue.active.ttl-seconds}")
+    @Value("${queue.active.ttl-seconds:300}")
     private long activeTtlSeconds;
 
     public QueueJoinResponse joinQueue(String userId) {
