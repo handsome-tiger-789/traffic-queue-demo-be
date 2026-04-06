@@ -76,11 +76,8 @@ public class QueueService {
 
     public boolean cancelQueue(String token) {
         Long removed = redisTemplate.opsForZSet().remove(WAITING_KEY, token);
-        boolean wasActive = Boolean.TRUE.equals(redisTemplate.hasKey(ACTIVE_TOKEN_PREFIX + token));
         redisTemplate.delete(TOKEN_USER_PREFIX + token);
-        redisTemplate.delete(ACTIVE_TOKEN_PREFIX + token);
-        redisTemplate.opsForSet().remove(ACTIVE_SET_KEY, token);
-        if ((removed != null && removed > 0) || wasActive) {
+        if (removed != null && removed > 0) {
             log.info("Token {} cancelled from queue", token);
             return true;
         }
